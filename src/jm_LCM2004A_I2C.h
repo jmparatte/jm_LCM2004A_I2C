@@ -234,7 +234,7 @@ public:
 
 	bool begin(); // return OK
 	bool begin(uint8_t i2c_address); // return OK
-	void end();
+	bool end();
 
 	virtual size_t write(uint8_t value);
 	using Print::write;

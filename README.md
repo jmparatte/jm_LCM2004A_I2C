@@ -83,6 +83,8 @@ public:
 	inline void home();
 	inline void setCursor(uint8_t col, uint8_t row);
 
+/* NOT YET IMPLEMENTED !!!
+
 	// Turn the display on/off (quickly)
 	inline void noDisplay();
 	inline void display();
@@ -110,6 +112,8 @@ public:
 
 	// This will 'left justify' text from the cursor
 	inline void noAutoscroll(void);
+
+*/
 
 	inline void createChar(uint8_t location, uint8_t charmap[]);
 

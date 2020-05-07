@@ -160,7 +160,10 @@ bool jm_LCM2004A_I2C::write_cgram(uint8_t index, uint8_t count, const uint8_t fo
 {
 	if (!set_cgram_addr(index * 8)) return false;
 
-	if (write(font5x8, count * 8) == 0) return false;
+//	if (write(font5x8, count * 8) == 0) return false;
+	for (uint8_t i=0; i<count; i++)
+		for (uint8_t j=0; j<8; j++)
+			if (wr_data( * ((const uint8_t  *) font5x8++) ) == 0) return false;
 
 	return true;
 }
@@ -173,7 +176,7 @@ bool jm_LCM2004A_I2C::write_cgram_P(uint8_t index, uint8_t count, const uint8_t 
 
 	for (uint8_t i=0; i<count; i++)
 		for (uint8_t j=0; j<8; j++)
-			if (write(pgm_read_byte_near((const uint8_t  *) font5x8_P++)) == 0) return false;
+			if (wr_data(pgm_read_byte_near((const uint8_t  *) font5x8_P++)) == 0) return false;
 
 	return true;
 }
@@ -335,14 +338,13 @@ bool jm_LCM2004A_I2C::begin(uint8_t i2c_address) // return OK
 	return reset(i2c_address);
 }
 
-void jm_LCM2004A_I2C::end()
+bool jm_LCM2004A_I2C::end()
 {
-	_pcf8574.end();
+	return _pcf8574.end();
 }
 
 inline size_t jm_LCM2004A_I2C::write(uint8_t value)
 {
-//	if (!_hd44780u_wr_8bit(value, true, 0)) return 0; else return 1;
 	if (!wr_data(value)) return 0; else return 1;
 }
 
