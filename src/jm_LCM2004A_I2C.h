@@ -2,11 +2,13 @@
 #ifndef jm_LCM2004A_I2C_h
 #define jm_LCM2004A_I2C_h
 
-#include <jm_PCF8574.h>
-
 #include <stddef.h>
 #include <stdint.h>
-#include <inttypes.h>
+//#include <inttypes.h>
+
+#include <Print.h>
+
+#include <jm_PCF8574.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 

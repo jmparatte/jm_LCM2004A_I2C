@@ -1,6 +1,7 @@
 # jm_LCM2004A_I2C Arduino Library
 
-2020-05-04: v1.0.0 - Initial commit.
+2020-05-11: v1.0.1 - Checked with architectures AVR, SAM and ESP32.  
+2020-05-04: v1.0.0 - Initial commit.  
 
 
 
