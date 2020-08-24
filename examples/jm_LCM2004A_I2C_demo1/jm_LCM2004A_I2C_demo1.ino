@@ -63,7 +63,7 @@ void setup()
 	lcd.set_cursor(13,3);
 	lcd.write('3');
 
-	Serial.println(lcd.rd_command(), HEX);
+	Serial.println(lcd.rd_instreg(), HEX);
 
 	delay(1000);
 
@@ -80,7 +80,7 @@ void setup()
 	lcd.set_cursor(13,3);
 	lcd.write('3');
 
-	Serial.println(lcd.rd_command(), HEX);
+	Serial.println(lcd.rd_instreg(), HEX);
 
 	delay(1000);
 

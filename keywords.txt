@@ -12,17 +12,25 @@ jm_LCM2004A_I2C	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-wr_command	WORD2
-rd_command	KEYWORD2
-wr_data	KEYWORD2
+wr_highorder	KEYWORD2
+rd_highorder	KEYWORD2
+wr_databus	KEYWORD2
+rd_databus	KEYWORD2
+
+wr_instreg	KEYWORD2
+rd_instreg	KEYWORD2
+wr_datareg	KEYWORD2
+rd_datareg	KEYWORD2
 
 reset	KEYWORD2
 clear_display	KEYWORD2
 return_home	KEYWORD2
+
 entry_mode_set	KEYWORD2
 display_control	KEYWORD2
 cursor_display_shift	KEYWORD2
 function_set	KEYWORD2
+
 set_cgram_addr	KEYWORD2
 set_ddram_addr	KEYWORD2
 set_cursor	KEYWORD2
@@ -47,11 +55,9 @@ noAutoscroll	KEYWORD2
 createChar	KEYWORD2
 command	KEYWORD2
 
+i2c_address	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
-i2c_address	KEYWORD2
-clr_screen	KEYWORD2
-set_cursor	KEYWORD2
 write	KEYWORD2
 print	KEYWORD2
 

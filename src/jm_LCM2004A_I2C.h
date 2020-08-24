@@ -14,22 +14,22 @@
 
 // Clear display
 // =============
-// Clears entire display and sets DDRAM address 0 in address counter.
+// Clears entire display and sets DDRAM address 0 in address rd_IR.
 //
 // Execution time: 1520us ???
 //
-#define HD44780U_CLEAR		((uint8_t) 0b00000001)
+#define HD44780_CLEAR		((uint8_t) 0b00000001)
 
 // Return home
 // ===========
 //
-// Sets DDRAM address 0 in address counter.
+// Sets DDRAM address 0 in address rd_IR.
 // Also returns display from being shifted to original position.
 // DDRAM contents remain unchanged.
 //
 // Execution time: 1520us
 //
-#define HD44780U_HOME		((uint8_t) 0b00000010)
+#define HD44780_HOME		((uint8_t) 0b00000010)
 
 // Entry mode set
 // ==============
@@ -43,9 +43,9 @@
 //
 // Execution time: 37us
 //
-#define HD44780U_ENTRY		((uint8_t) 0b00000100)
-#define HD44780U_ENTRY_I_D	((uint8_t) 0b00000010)
-#define HD44780U_ENTRY_S	((uint8_t) 0b00000001)
+#define HD44780_ENTRY		((uint8_t) 0b00000100)
+#define HD44780_ENTRY_I_D	((uint8_t) 0b00000010)
+#define HD44780_ENTRY_S		((uint8_t) 0b00000001)
 
 // Display on/off control
 // ======================
@@ -55,10 +55,10 @@
 //
 // Execution time: 37us
 //
-#define HD44780U_DISPLAY	((uint8_t) 0b00001000)
-#define HD44780U_DISPLAY_D	((uint8_t) 0b00000100)
-#define HD44780U_DISPLAY_C	((uint8_t) 0b00000010)
-#define HD44780U_DISPLAY_B	((uint8_t) 0b00000001)
+#define HD44780_CONTROL		((uint8_t) 0b00001000)
+#define HD44780_CONTROL_D	((uint8_t) 0b00000100)
+#define HD44780_CONTROL_C	((uint8_t) 0b00000010)
+#define HD44780_CONTROL_B	((uint8_t) 0b00000001)
 
 // Cursor or display shift
 // =======================
@@ -72,25 +72,25 @@
 //
 // Execution time: 37us
 //
-#define HD44780U_CURSOR		((uint8_t) 0b00010000)
-#define HD44780U_CURSOR_S_C	((uint8_t) 0b00001000)
-#define HD44780U_CURSOR_R_L	((uint8_t) 0b00000100)
+#define HD44780_SHIFT		((uint8_t) 0b00010000)
+#define HD44780_SHIFT_S_C	((uint8_t) 0b00001000)
+#define HD44780_SHIFT_R_L	((uint8_t) 0b00000100)
 
 // Function set
 // ============
 //
 // Sets interface data length (DL), number of data lines (N), and character font (F).
 //
-// DL  = 1: 8 bits, 0: 4 bits
+// DL  = 1: 8 bits, 0: 4bit mode
 // N   = 1: 2 lines, 0: 1 line
 // F   = 1: 5x10 dots, 0: 5x8 dots
 //
 // Execution time: 37us
 //
-#define HD44780U_SET		((uint8_t) 0b00100000)
-#define HD44780U_SET_DL		((uint8_t) 0b00010000)
-#define HD44780U_SET_N		((uint8_t) 0b00001000)
-#define HD44780U_SET_F		((uint8_t) 0b00000100)
+#define HD44780_FUNCTION	((uint8_t) 0b00100000)
+#define HD44780_FUNCTION_DL ((uint8_t) 0b00010000)
+#define HD44780_FUNCTION_N	((uint8_t) 0b00001000)
+#define HD44780_FUNCTION_F	((uint8_t) 0b00000100)
 
 // Set CGRAM address
 // =================
@@ -100,8 +100,8 @@
 //
 // Execution time: 37us
 //
-#define HD44780U_CGRAM		((uint8_t) 0b01000000)
-#define HD44780U_CGRAM_ACG	((uint8_t) 0b00111111)
+#define HD44780_CGRAM		((uint8_t) 0b01000000)
+#define HD44780_CGRAM_ACG	((uint8_t) 0b00111111)
 
 // Set DDRAM address
 // =================
@@ -111,23 +111,23 @@
 //
 // Execution time: 37us
 //
-#define HD44780U_DDRAM		((uint8_t) 0b10000000)
-#define HD44780U_DDRAM_ADD	((uint8_t) 0b01111111)
+#define HD44780_DDRAM		((uint8_t) 0b10000000)
+#define HD44780_DDRAM_ADD	((uint8_t) 0b01111111)
 
 // Read busy flag & address
 // ========================
 //
 // Reads busy flag (BF) indicating internal operation is being performed
-// and reads address counter contents.
+// and reads address rd_IR contents.
 // BF  = 1: Internally operating
 // BL  = 0: Instructions acceptable
-// AC  = Address counter used for both DD and CGRAM addresses
+// AC  = Address rd_IR used for both DD and CGRAM addresses
 //
 // Execution time: 0us
 //
-#define HD44780U_READ		((uint8_t) 0b00000000)
-#define HD44780U_READ_BF	((uint8_t) 0b10000000)
-#define HD44780U_READ_AC	((uint8_t) 0b01111111)
+#define HD44780_READ		((uint8_t) 0b00000000)
+#define HD44780_READ_BF		((uint8_t) 0b10000000)
+#define HD44780_READ_AC		((uint8_t) 0b01111111)
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -155,29 +155,50 @@ protected:
 	jm_PCF8574 _pcf8574; // the i2c interface device of LCM2004A
 	bool _BL; // the saved backlight state of LCM2004A
 
-	bool _hd44780u_wr_4bit(uint8_t DB, bool RS, uint16_t us); // return OK
-	int _hd44780u_rd_4bit(bool RS); // return byte (high nibble) or -1 (fail)
+	bool wr_highorder(uint8_t DB, bool RS, uint16_t us); // return OK
+	int rd_highorder(bool RS); // return byte (high data) or -1 (fail)
 
-	bool _hd44780u_wr_8bit(uint8_t data, bool RS, uint16_t us); // return OK
-	int _hd44780u_rd_8bit(bool RS); // return byte or -1 (fail)
+	bool wr_databus(uint8_t data, bool RS, uint16_t us); // return OK
+	int rd_databus(bool RS); // return byte or -1 (fail)
+
+protected:
+
+	uint8_t _entry_mode_set;
+	uint8_t _display_control;
+	uint8_t _cursor_display_shift;
+	uint8_t _function_set;
 
 public:
 
 // LCM2004A...
 
-	bool wr_command(uint8_t command, uint16_t us); // return OK
-	int rd_command(); // return byte or -1 (fail)
-	bool wr_data(uint8_t value); // return OK
+	bool wr_instreg(uint8_t data, uint16_t us); // return OK
+	int rd_instreg(); // return byte or -1 (fail)
+	bool wr_datareg(uint8_t data); // return OK
+	int rd_datareg(); // return byte or -1 (fail)
 
 	bool reset(uint8_t i2c_address); // return OK
+
 	bool clear_display(); // return OK
 	bool return_home(); // return OK
-	bool entry_mode_set(bool I_D=true, bool S=false); // return OK
-	bool display_control(bool D=true, bool C=false, bool B=false); // return OK
-	bool cursor_display_shift(bool S_C=false, bool R_L=true); // return OK
-	bool function_set(bool DL=false, bool N=true, bool F=false); // return OK (default 4 bits, 2 lines, 5x8 dots)
-	bool set_cgram_addr(uint8_t ACG=0); // return OK
-	bool set_ddram_addr(uint8_t ADD=0); // return OK
+
+	bool entry_mode_set(uint8_t ems); // return Entry mode set current value
+	bool display_control(uint8_t dc); // return Display control current value
+	bool cursor_display_shift(uint8_t ds); // return Cursor display shift current value
+	bool function_set(uint8_t fs); // return Function set current value
+
+	bool entry_mode_set(bool I_D, bool S); // return OK
+	bool display_control(bool D, bool C, bool B); // return OK
+	bool cursor_display_shift(bool S_C, bool R_L); // return OK
+	bool function_set(bool DL, bool N, bool F); // return OK
+
+	bool set_cgram_addr(uint8_t ACG); // return OK
+	bool set_ddram_addr(uint8_t ADD); // return OK
+
+	uint8_t entry_mode_set(); // return Entry mode set current value
+	uint8_t display_control(); // return Display control current value
+	uint8_t cursor_display_shift(); // return Cursor display shift current value
+	uint8_t function_set(); // return Function set current value
 
 	bool set_cursor(int col, int row); // return OK
 
@@ -190,42 +211,42 @@ public:
 
 // LiquidCrystal compatibility...
 
-	inline void clear();
-	inline void home();
-	inline void setCursor(uint8_t col, uint8_t row);
+	void clear();
+	void home();
+	void setCursor(uint8_t col, uint8_t row);
 
 	// Turn the display on/off (quickly)
-	inline void noDisplay();
-	inline void display();
+	void noDisplay();
+	void display();
 
 	// Turns the underline cursor on/off
-	inline void noCursor();
-	inline void cursor();
+	void noCursor();
+	void cursor();
 
 	// Turn on and off the blinking cursor
-	inline void noBlink();
-	inline void blink();
+	void noBlink();
+	void blink();
 
 	// These commands scroll the display without changing the RAM
-	inline void scrollDisplayLeft(void);
-	inline void scrollDisplayRight(void);
+	void scrollDisplayLeft(void);
+	void scrollDisplayRight(void);
 
 	// This is for text that flows Left to Right
-	inline void leftToRight(void);
+	void leftToRight(void);
 
 	// This is for text that flows Right to Left
-	inline void rightToLeft(void);
+	void rightToLeft(void);
 
 	// This will 'right justify' text from the cursor
-	inline void autoscroll(void);
+	void autoscroll(void);
 
 	// This will 'left justify' text from the cursor
-	inline void noAutoscroll(void);
+	void noAutoscroll(void);
 
-	inline void createChar(uint8_t location, uint8_t charmap[]);
+	void createChar(uint8_t location, uint8_t charmap[]);
 
-	inline void command(uint8_t value);
-	//inline size_t write(uint8_t value);
+	void command(uint8_t value);
+	//size_t write(uint8_t value);
 
 // LCM2004A_I2C...
 
