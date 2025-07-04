@@ -342,10 +342,10 @@ void lcd_coroutine()
 	lcd.print_h8(c);
 
 	lcd.set_cursor(0, 0);
-	int a1 = lcd.rd_instreg();
-	int c1 = lcd.rd_datareg();
-	int a2 = lcd.rd_instreg();
-	int c2 = lcd.rd_datareg();
+	int a1 = lcd.instreg_rd();
+	int c1 = lcd.datareg_rd();
+	int a2 = lcd.instreg_rd();
+	int c2 = lcd.datareg_rd();
 	lcd.set_cursor(4, 0);
 	lcd.print_h8(a1);
 	lcd.print_h8(c1);

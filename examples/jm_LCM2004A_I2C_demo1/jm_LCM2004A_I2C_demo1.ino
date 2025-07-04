@@ -29,16 +29,18 @@ const PROGMEM uint8_t custom_font5x8_P[8][8] = {
 void setup()
 {
 	Serial.begin(115200);
-	while (!Serial && millis()<3000) {} // wait for USB Serial ready
-	Serial.print(F(__PROG__));
-	Serial.print(F("..."));
+	delay(3000); // wait for USB Serial ready
+
 	Serial.println();
+	Serial.println(F(__PROG__ "..."));
 
 	Wire.begin();
 
 	lcd.begin();
 
-	delay(500);
+	Serial.println(lcd.instreg_rd(), HEX);
+
+	delay(1000);
 
 	lcd.print(F("qwertz"));
 
@@ -63,7 +65,7 @@ void setup()
 	lcd.set_cursor(13,3);
 	lcd.write('3');
 
-	Serial.println(lcd.rd_instreg(), HEX);
+	Serial.println(lcd.instreg_rd(), HEX);
 
 	delay(1000);
 
@@ -80,7 +82,7 @@ void setup()
 	lcd.set_cursor(13,3);
 	lcd.write('3');
 
-	Serial.println(lcd.rd_instreg(), HEX);
+	Serial.println(lcd.instreg_rd(), HEX);
 
 	delay(1000);
 
