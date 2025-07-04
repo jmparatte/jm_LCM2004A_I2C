@@ -1,7 +1,8 @@
 # jm_LCM2004A_I2C Arduino Library
 
 2025-07-03: v2.0.0 - `jm_LCM2004A_I2C` is now inherited from `Stream` Arduino class. Now it's possible to `read` the screen and realize function like `PrintScreen`. Also, the I2C bus can now be freely selected.
-The library is now licensed LGPLv2.1 (previously LGPLv3.0).2020-08-25: v1.0.2 - Added compatibility with LiquidCrystal library.  
+The library is now licensed LGPLv2.1 (previously LGPLv3.0).
+2020-08-25: v1.0.2 - Added compatibility with LiquidCrystal library.  
 2020-05-11: v1.0.1 - Checked with architectures AVR, SAM and ESP32.  
 2020-05-04: v1.0.0 - Initial commit.  
 
